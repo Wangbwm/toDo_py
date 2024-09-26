@@ -156,6 +156,7 @@ class MidGroupWidget(QWidget):
         self.treeWidget_group_1.setStyleSheet('background-color: rgb(249, 249, 249);\
                                               font: 25 11pt "等线";')
         self.treeWidget_group_1.setFixedSize(600, 400)
+        self.treeWidget_group_1.header().setVisible(False)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.addWidget(self.treeWidget_group_1)
         self.widget_group_1.setLayout(self.horizontalLayout)

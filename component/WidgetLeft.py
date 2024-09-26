@@ -1,13 +1,18 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTreeWidgetItem
 from qfluentwidgets import PushButton, ToolButton, TitleLabel
 from qfluentwidgets import FluentIcon as FIF
 
 
 class WidgetLeft(QWidget):
-    def __init__(self, comm):
+    def __init__(self, db, service, comm):
         super().__init__()
+        self.db = db
+        self.service = service
         self.comm = comm
+        self.m_userId = -1
+        self.m_username = ""
+        self.m_usersGroup = {}
         # 创建垂直布局
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -38,6 +43,12 @@ class WidgetLeft(QWidget):
         self.tree_widget_left.setStyleSheet('border-radius:0px;\
 border:none;\
 font: 25 10pt "等线";')
+        self.tree_widget_left.header().setHidden(True)
+        # 横向滑动条
+        self.tree_widget_left.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        HBar = QtWidgets.QScrollBar()
+        self.tree_widget_left.setHorizontalScrollBar(HBar)
+        self.tree_widget_left.header().setMinimumSectionSize(300)
         self.verticalLayout.addWidget(self.tree_widget_left)
 
         self.user_head = ToolButton(FIF.ROBOT)
@@ -70,12 +81,36 @@ font: 25 13pt "等线";')
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.setLayout(self.verticalLayout)
-
+        # self.init()
         self.init_connections()
+
+    def init(self):
+        self.init_treeWidget()
 
     def init_connections(self):
         self.btn_home.clicked.connect(lambda: self.comm.singleton.emit('BTN_HOME_CLICKED'))
         self.btn_todo.clicked.connect(lambda: self.comm.singleton.emit('BTN_TODO_CLICKED'))
         self.btn_group.clicked.connect(lambda: self.comm.singleton.emit('BTN_GROUP_CLICKED'))
+        self.comm.singleton_list.connect(self.setUserInfo)
 
+    def setUserInfo(self, single, x):
+        if single == 'SET_USER_INFO':
+            self.m_userId = x[0]
+            self.m_username = x[1]
+            self.label_user.setText(self.m_username)
+            self.init()
 
+    def init_treeWidget(self):
+        self.tree_widget_left.clear()
+        if self.m_usersGroup is not None:
+            self.m_usersGroup.clear()
+        root = QTreeWidgetItem(self.tree_widget_left)
+        root.setText(0, "我的组")
+        root.setExpanded(True)
+        self.m_usersGroup = self.service.selectGroup(self.db, self.m_userId)
+        if self.m_usersGroup is not None:
+            for groupId, groupName in self.m_usersGroup.items():
+                groupItem = QTreeWidgetItem()
+                groupItem.setText(0, groupName)
+                groupItem.setData(0, 1, groupId)
+                root.addChild(groupItem)

@@ -123,6 +123,8 @@ class LoginWidget(QWidget):
             w = MessageBox("欢迎", ans[1], self)
             w.exec()
             self.comm.singleton.emit('ADD_TASK_WIDGET')
+            user_id = self.service.selectUserID(self.db, self.user_lineEdit.text())
+            self.comm.singleton_list.emit('SET_USER_INFO', [user_id, self.user_lineEdit.text()])
         else:
             w = MessageBox("错误", ans[1], self)
             w.exec()

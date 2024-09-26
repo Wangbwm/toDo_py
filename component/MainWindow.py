@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout
 from component.WidgetLeft import WidgetLeft
 from component.WidgetMid import WidgetMid
 from component.WidgetRight import WidgetRight
+from service.TaskService import TaskService
 
 
 class MainWindow(QWidget):
@@ -11,10 +12,11 @@ class MainWindow(QWidget):
         super().__init__()
         self.db = db
         self.comm = comm
+        self.service = TaskService()
         self.setObjectName('MainWindow')
         # 创建水平布局
         self.hBoxLayout = QHBoxLayout(self)
-        self.widget_left = WidgetLeft(self.comm)
+        self.widget_left = WidgetLeft(self.db, self.service, self.comm)
         self.widget_mid = WidgetMid(self.comm)
         self.widget_right = WidgetRight()
 

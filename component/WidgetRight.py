@@ -127,6 +127,7 @@ class WidgetRight(QWidget):
         self.widget_add_1.setObjectName("widget_add_1")
         horizontalLayout = QHBoxLayout()
         self.treeWidget_add = QtWidgets.QTreeWidget(self)
+        self.treeWidget_add.header().setVisible(False)
         horizontalLayout.addWidget(self.treeWidget_add)
         self.widget_add_1.setLayout(horizontalLayout)
         self.stackedWidget_add.addWidget(self.widget_add_1)

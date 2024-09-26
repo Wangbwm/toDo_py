@@ -86,7 +86,7 @@ class StartDao:
         # 如果操作成功，返回T
         return True, '注册成功'
 
-    def selectUserID(db, m_username):
+    def selectUserID(self, db, m_username):
         # 准备一个SQL查询对象，用于执行数据库查询
         query = QtSql.QSqlQuery(db)
         query.prepare("SELECT id FROM UserAccount WHERE username = ?;")
@@ -98,79 +98,3 @@ class StartDao:
         if query.next():
             return query.value(0)
         return False
-
-    def selectGroupListByUserName(db, username):
-        # 准备一个SQL查询对象，用于执行数据库查询
-        query = QtSql.QSqlQuery(db)
-        query.prepare("SELECT groups_list FROM todo_user WHERE username = ?")
-        query.bindValue(0, username)
-        if not query.exec_():
-            # 如果查询失败，打印错误信息并返回False
-            print("Query failed:", query.lastError().text())
-            return None
-        if query.next():
-            return query.value(0)
-
-    def selectGroupNameById(db, group_id):
-        # 准备一个SQL查询对象，用于执行数据库查询
-        query = QtSql.QSqlQuery(db)
-        query.prepare("SELECT group_name FROM todo_groups WHERE id = ?")
-        query.bindValue(0, group_id)
-        if not query.exec_():
-            # 如果查询失败，打印错误信息并返回False
-            print("Query failed:", query.lastError().text())
-            return None
-        if query.next():
-            return query.value(0)
-        return None
-
-    # 定义一个函数来处理单个任务的数据
-    def process_task_row(query):
-        id = int(query.value('id'))
-        group_id = query.value('group_id')
-        groupId = -1 if group_id == '' else int(group_id)
-        userId = -1
-        eventName = query.value('event_name')
-        isArranged = bool(query.value('is_arranged'))
-        priority = 0 if query.value('priority') == '' else int(query.value('priority'))
-        pdueDate = query.value('due_date')
-        dueDate = QDateTime() if pdueDate is None else pdueDate
-        isRepeated = bool(query.value('is_repeated'))
-        premindTime = query.value('remind_time')
-        remindtime = QDateTime() if premindTime is None else premindTime
-        description = query.value('description')
-        location = query.value('location')
-        note = query.value('note')
-
-        return KTask(id, userId, groupId, eventName, isArranged, priority, dueDate, isRepeated, remindtime, description,
-                     location, note)
-
-    def selectAllTasksGroup(self, db, group_id):
-        # 准备一个SQL查询对象，用于执行数据库查询
-        query = QtSql.QSqlQuery(db)
-        query.prepare("SELECT * FROM todo_list WHERE group_id = ?")
-        query.bindValue(0, group_id)
-        taskList = []
-        if not query.exec_():
-            # 如果查询失败，打印错误信息并返回False
-            print("Query failed:", query.lastError().text())
-            return None
-        while query.next():
-            task = self.process_task_row(query)
-            taskList.append(task)
-        return taskList
-
-    def selectAllTasks(self, db, userID):
-        # 准备一个SQL查询对象，用于执行数据库查询
-        query = QtSql.QSqlQuery(db)
-        query.prepare("SELECT * FROM todo_list WHERE user_id = ?")
-        query.bindValue(0, userID)
-        taskList = []
-        if not query.exec_():
-            # 如果查询失败，打印错误信息并返回False
-            print("Query failed:", query.lastError().text())
-            return None
-        while query.next():
-            task = self.process_task_row(query)
-            taskList.append(task)
-        return taskList
