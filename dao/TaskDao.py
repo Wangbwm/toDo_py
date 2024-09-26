@@ -8,14 +8,17 @@ class TaskDao:
     def selectGroupListByUserId(self, db, user_id):
         # 准备一个SQL查询对象，用于执行数据库查询
         query = QtSql.QSqlQuery(db)
-        query.prepare("SELECT groups_list FROM todo_user WHERE id = ?")
+        query.prepare("SELECT group_id FROM todo_user_group WHERE user_id = ?")
         query.bindValue(0, user_id)
         if not query.exec_():
             # 如果查询失败，打印错误信息并返回False
             print("Query failed:", query.lastError().text())
             return None
-        if query.next():
-            return query.value(0)
+        group_list = []
+        while query.next():
+            group_list.append(query.value(0))
+        return group_list
+
     def selectGroupNameById(self, db, group_id):
         # 准备一个SQL查询对象，用于执行数据库查询
         query = QtSql.QSqlQuery(db)
