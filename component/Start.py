@@ -6,9 +6,10 @@ from component.Register import RegisterWidget
 
 
 class StartWidget(QWidget):
-    def __init__(self, db):
+    def __init__(self, db, comm):
         super().__init__()
         self.db = db
+        self.comm = comm
         self.setObjectName('Start')
         # 设置字体
         font = QtGui.QFont()
@@ -22,7 +23,7 @@ class StartWidget(QWidget):
         self.stackWidget.setObjectName("stackWidget")
 
         # 创建子界面
-        self.loginWidget = LoginWidget(self.db)
+        self.loginWidget = LoginWidget(self.db, self.comm)
         self.registerWidget = RegisterWidget(self.db)
 
 

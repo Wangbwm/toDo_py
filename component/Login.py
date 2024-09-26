@@ -2,15 +2,17 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QWidget, QHBoxLayout
 from qfluentwidgets import PushButton, LineEdit, PasswordLineEdit, MessageBox
 
+from Communicate import Communicate
 from service.StartService import StartService
 
 
 class LoginWidget(QWidget):
-    def __init__(self, db):
+    def __init__(self, db, comm):
         super().__init__()
         self.setObjectName('login')
         self.db = db
         self.service = StartService()
+        self.comm = comm
 
         # 设置字体
         font = QtGui.QFont()
@@ -120,6 +122,7 @@ class LoginWidget(QWidget):
         if ans[0]:
             w = MessageBox("欢迎", ans[1], self)
             w.exec()
+            self.comm.singleton.emit('ADD_TASK_WIDGET')
         else:
             w = MessageBox("错误", ans[1], self)
             w.exec()

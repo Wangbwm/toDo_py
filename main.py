@@ -7,6 +7,7 @@ from qfluentwidgets import (NavigationInterface, NavigationItemPosition, isDarkT
 from qfluentwidgets import FluentIcon as FIF
 from qframelesswindow import FramelessWindow, StandardTitleBar
 
+from Communicate import Communicate
 from component.MainWindow import MainWindow
 from component.Start import StartWidget
 from dao.db import DbConnection
@@ -28,19 +29,19 @@ class Window(FramelessWindow):
     def __init__(self):
         super().__init__()
         self.db = DbConnection().db
+        self.comm = Communicate()
         self.setTitleBar(StandardTitleBar(self))
 
         self.hBoxLayout = QHBoxLayout(self)
         self.navigationInterface = NavigationInterface(self, showMenuButton=True)
         self.stackWidget = QStackedWidget(self)
 
-        self.startWidget = StartWidget(self.db)
-        self.MainWindow = MainWindow()
+        self.startWidget = StartWidget(self.db, self.comm)
+        self.MainWindow = MainWindow(self.db, self.comm)
         self.stackWidget.addWidget(self.startWidget)
         self.stackWidget.addWidget(self.MainWindow)
 
         self.setStyleSheet("background-color: rgb(220, 220, 220);")
-
 
         # initialize layout
         self.initLayout()
@@ -49,6 +50,8 @@ class Window(FramelessWindow):
         self.initNavigation()
 
         self.initWindow()
+
+        self.init_connections()
 
     def initLayout(self):
         self.hBoxLayout.setSpacing(0)
@@ -59,10 +62,9 @@ class Window(FramelessWindow):
 
     def initNavigation(self):
         self.addSubInterface(self.startWidget, FIF.HOME, 'Start')
-        self.addSubInterface(self.MainWindow, FIF.QUICK_NOTE, 'Note')
-
+        # self.addSubInterface(self.MainWindow, FIF.QUICK_NOTE, 'Note')
         self.stackWidget.currentChanged.connect(self.onCurrentInterfaceChanged)
-        self.stackWidget.setCurrentIndex(0)
+        self.stackWidget.setCurrentWidget(self.startWidget)
 
     def initWindow(self):
         self.resize(1200, 700)
@@ -79,6 +81,9 @@ class Window(FramelessWindow):
         # self.navigationInterface.expand(useAni=False)
 
         self.setQss()
+
+    def init_connections(self):
+        self.comm.singleton.connect(self.addTaskWidget)
 
     def addSubInterface(self, interface, icon, text: str, position=NavigationItemPosition.TOP, parent=None):
         """ add sub interface """
@@ -109,6 +114,13 @@ class Window(FramelessWindow):
 
     def switchNext(self):
         pass
+
+    def addTaskWidget(self, single):
+        if single == 'ADD_TASK_WIDGET':
+            self.addSubInterface(self.MainWindow, FIF.QUICK_NOTE, 'Note')
+            self.switchTo(self.MainWindow)
+            self.navigationInterface.removeWidget(self.startWidget.objectName())
+            self.showMaximized()
 
 
 if __name__ == '__main__':

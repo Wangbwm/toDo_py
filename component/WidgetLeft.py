@@ -5,8 +5,9 @@ from qfluentwidgets import FluentIcon as FIF
 
 
 class WidgetLeft(QWidget):
-    def __init__(self):
+    def __init__(self, comm):
         super().__init__()
+        self.comm = comm
         # 创建垂直布局
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -37,7 +38,6 @@ class WidgetLeft(QWidget):
         self.tree_widget_left.setStyleSheet('border-radius:0px;\
 border:none;\
 font: 25 10pt "等线";')
-        self.tree_widget_left.setFixedSize(200, 500)
         self.verticalLayout.addWidget(self.tree_widget_left)
 
         self.user_head = ToolButton(FIF.ROBOT)
@@ -70,5 +70,12 @@ font: 25 13pt "等线";')
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.setLayout(self.verticalLayout)
+
+        self.init_connections()
+
+    def init_connections(self):
+        self.btn_home.clicked.connect(lambda: self.comm.singleton.emit('BTN_HOME_CLICKED'))
+        self.btn_todo.clicked.connect(lambda: self.comm.singleton.emit('BTN_TODO_CLICKED'))
+        self.btn_group.clicked.connect(lambda: self.comm.singleton.emit('BTN_GROUP_CLICKED'))
 
 

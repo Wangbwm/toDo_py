@@ -15,6 +15,8 @@ class WidgetRight(QWidget):
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.checkBox_home = RadioButton()
+        self.hSpacer = QtWidgets.QSpacerItem(70, 10, QtWidgets.QSizePolicy.Fixed)
+        self.horizontalLayout.addItem(self.hSpacer)
         self.horizontalLayout.addWidget(self.checkBox_home)
         self.lineEdit_name = LineEdit()
         self.lineEdit_name.setFixedSize(120, 30)
@@ -35,6 +37,8 @@ class WidgetRight(QWidget):
         color: rgb(54,66,90);\
         border-radius:0px;')
         self.comboBox_priority.setFixedSize(120, 30)
+        self.hSpacer = QtWidgets.QSpacerItem(70, 10, QtWidgets.QSizePolicy.Fixed)
+        self.horizontalLayout.addItem(self.hSpacer)
         self.horizontalLayout.addWidget(self.comboBox_priority)
         self.hSpacer = QtWidgets.QSpacerItem(120, 20, QtWidgets.QSizePolicy.Expanding)
         self.horizontalLayout.addItem(self.hSpacer)
