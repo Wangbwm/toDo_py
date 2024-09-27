@@ -32,9 +32,16 @@ class WidgetMid(QWidget):
     def single_methods(self, signal):
         if signal == 'BTN_GROUP_CLICKED':
             self.stackWidget.setCurrentWidget(self.group_widget)
+            self.home_widget.sort_comboBox.setCurrentIndex(0)
+            self.comm.singleton.emit('SET_DISABLE_RIGHT_WIDGET')
         elif signal == 'BTN_HOME_CLICKED':
             self.stackWidget.setCurrentWidget(self.home_widget)
+            self.home_widget.sort_comboBox.setVisible(False)
+            self.comm.singleton.emit('SET_DISABLE_RIGHT_WIDGET')
         elif signal == 'BTN_TODO_CLICKED':
             self.stackWidget.setCurrentWidget(self.home_widget)
+            self.home_widget.sort_comboBox.setVisible(True)
+            self.comm.singleton.emit('SET_DISABLE_RIGHT_WIDGET')
+
 
 

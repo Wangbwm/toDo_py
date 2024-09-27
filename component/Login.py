@@ -125,6 +125,7 @@ class LoginWidget(QWidget):
             self.comm.singleton.emit('ADD_TASK_WIDGET')
             user_id = self.service.selectUserID(self.db, self.user_lineEdit.text())
             self.comm.singleton_list.emit('SET_USER_INFO', [user_id, self.user_lineEdit.text()])
+            self.comm.singleton.emit('BTN_HOME_CLICKED')
         else:
             w = MessageBox("错误", ans[1], self)
             w.exec()

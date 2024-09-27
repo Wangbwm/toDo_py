@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QWidget, QHBoxLayout
-from qfluentwidgets import ComboBox, ToolButton, PushButton, TreeWidget
+from qfluentwidgets import ComboBox, ToolButton, PushButton, TreeWidget, LineEdit
 from qfluentwidgets import FluentIcon as FIF
 
 
@@ -49,13 +49,33 @@ border-radius:0px;')
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.horizontalLayout = QHBoxLayout()
-        self.hSpacer = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Fixed)
+        self.stackedWidget_create = QtWidgets.QStackedWidget(self)
+        self.stackedWidget_create.setObjectName("stackedWidget_create")
+        self.widget_create_1 = QWidget()
+        self.hSpacer = QtWidgets.QSpacerItem(50, 5, QtWidgets.QSizePolicy.Fixed)
         self.horizontalLayout.addItem(self.hSpacer)
         self.btn_create = PushButton('+ 点击新建待办')
         self.btn_create.setObjectName("btn_create")
         self.horizontalLayout.addWidget(self.btn_create)
         self.hSpacer = QtWidgets.QSpacerItem(400, 20, QtWidgets.QSizePolicy.Expanding)
         self.horizontalLayout.addItem(self.hSpacer)
+        self.widget_create_1.setLayout(self.horizontalLayout)
+        self.stackedWidget_create.addWidget(self.widget_create_1)
+        self.widget_create_2 = QWidget()
+        self.horizontalLayout = QHBoxLayout()
+        self.hSpacer = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Expanding)
+        self.horizontalLayout.addItem(self.hSpacer)
+        self.lineEdit_create = LineEdit()
+        self.lineEdit_create.setObjectName("lineEdit_create")
+        self.lineEdit_create.setFixedSize(400, 30)
+        self.lineEdit_create.setPlaceholderText('输入后点击回车创建待办')
+        self.horizontalLayout.addWidget(self.lineEdit_create)
+        self.horizontalLayout.addItem(self.hSpacer)
+        self.widget_create_2.setLayout(self.horizontalLayout)
+        self.horizontalLayout = QHBoxLayout()
+        self.stackedWidget_create.addWidget(self.widget_create_2)
+        self.stackedWidget_create.setFixedHeight(50)
+        self.horizontalLayout.addWidget(self.stackedWidget_create)
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.vSpacer = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Preferred)
@@ -65,6 +85,8 @@ border-radius:0px;')
         self.treeWidget = TreeWidget()
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.header().setVisible(False)
+        self.treeWidget.setStyleSheet('background-color: rgb(249, 249, 249);\
+                                              font: 25 11pt "等线";')
         self.hSpacer = QtWidgets.QSpacerItem(40, 5, QtWidgets.QSizePolicy.Fixed)
         self.horizontalLayout.addItem(self.hSpacer)
         self.horizontalLayout.addWidget(self.treeWidget)
@@ -74,3 +96,11 @@ border-radius:0px;')
         self.verticalLayout.addItem(self.vSpacer)
 
         self.setLayout(self.verticalLayout)
+        self.init_connections()
+
+    def init_connections(self):
+        self.btn_create.clicked.connect(lambda: self.stackedWidget_create.setCurrentWidget(self.widget_create_2))
+        self.lineEdit_create.returnPressed.connect(self.create_pressed)
+
+    def create_pressed(self):
+        self.stackedWidget_create.setCurrentWidget(self.widget_create_1)

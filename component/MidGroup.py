@@ -63,6 +63,7 @@ class MidGroupWidget(QWidget):
         self.horizontalLayout = QHBoxLayout()
         self.stackWidget_create_group = QtWidgets.QStackedWidget(self)
         self.stackWidget_create_group.setObjectName("stackWidget_create_group")
+        self.stackWidget_create_group.setFixedHeight(50)
         self.widget_create_group_1 = QWidget()
         self.widget_create_group_1.setObjectName("widget_create_group_1")
         self.hSpacer = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed)
@@ -82,7 +83,8 @@ class MidGroupWidget(QWidget):
         self.horizontalLayout.addItem(self.hSpacer)
         self.lineEdit_create_group = LineEdit()
         self.lineEdit_create_group.setObjectName("lineEdit_create_group")
-        self.lineEdit_create_group.setFixedSize(600, 30)
+        self.lineEdit_create_group.setPlaceholderText('输入后点击回车创建分组')
+        self.lineEdit_create_group.setFixedSize(400, 30)
         self.horizontalLayout.addWidget(self.lineEdit_create_group)
         self.horizontalLayout.addItem(self.hSpacer)
         self.widget_create_group_2.setLayout(self.horizontalLayout)
@@ -92,6 +94,7 @@ class MidGroupWidget(QWidget):
         self.horizontalLayout = QHBoxLayout()
         self.stackWidget_invite = QtWidgets.QStackedWidget(self)
         self.stackWidget_invite.setObjectName("stackWidget_invite")
+        self.stackWidget_invite.setFixedHeight(50)
         self.widget_invite_1 = QWidget()
         self.widget_invite_1.setObjectName("widget_invite_1")
         self.hSpacer = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed)
@@ -111,7 +114,8 @@ class MidGroupWidget(QWidget):
         self.horizontalLayout.addItem(self.hSpacer)
         self.lineEdit_invite = LineEdit()
         self.lineEdit_invite.setObjectName("lineEdit_invite")
-        self.lineEdit_invite.setFixedSize(600, 30)
+        self.lineEdit_invite.setFixedSize(400, 30)
+        self.lineEdit_invite.setPlaceholderText('输入后点击回车发送邀请')
         self.horizontalLayout.addWidget(self.lineEdit_invite)
         self.horizontalLayout.addItem(self.hSpacer)
         self.widget_invite_2.setLayout(self.horizontalLayout)
@@ -121,6 +125,7 @@ class MidGroupWidget(QWidget):
         self.horizontalLayout = QHBoxLayout()
         self.stackWidget_create_task = QtWidgets.QStackedWidget(self)
         self.stackWidget_create_task.setObjectName("stackWidget_create_task")
+        self.stackWidget_create_task.setFixedHeight(50)
         self.widget_create_task_1 = QWidget()
         self.widget_create_task_1.setObjectName("widget_create_task_1")
         self.hSpacer = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed)
@@ -140,7 +145,8 @@ class MidGroupWidget(QWidget):
         self.horizontalLayout.addItem(self.hSpacer)
         self.lineEdit_create_task = LineEdit()
         self.lineEdit_create_task.setObjectName("lineEdit_create_task")
-        self.lineEdit_create_task.setFixedSize(600, 30)
+        self.lineEdit_create_task.setPlaceholderText('输入后点击回车创建待办')
+        self.lineEdit_create_task.setFixedSize(400, 30)
         self.horizontalLayout.addWidget(self.lineEdit_create_task)
         self.horizontalLayout.addItem(self.hSpacer)
         self.widget_create_task_2.setLayout(self.horizontalLayout)
@@ -155,7 +161,7 @@ class MidGroupWidget(QWidget):
         self.treeWidget_group_1.setObjectName("treeWidget_group_1")
         self.treeWidget_group_1.setStyleSheet('background-color: rgb(249, 249, 249);\
                                               font: 25 11pt "等线";')
-        self.treeWidget_group_1.setFixedSize(600, 400)
+        self.treeWidget_group_1.setFixedWidth(600)
         self.treeWidget_group_1.header().setVisible(False)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.addWidget(self.treeWidget_group_1)
@@ -190,5 +196,29 @@ font: 25 15pt "等线";')
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.setLayout(self.verticalLayout)
+        self.init_connections()
+
+    def init_connections(self):
+        self.btn_create_group.clicked.connect(
+            lambda: self.stackWidget_create_group.setCurrentWidget(self.widget_create_group_2)
+        )
+        self.btn_invite.clicked.connect(
+            lambda: self.stackWidget_invite.setCurrentWidget(self.widget_invite_2)
+        )
+        self.btn_create_task.clicked.connect(
+            lambda: self.stackWidget_create_task.setCurrentWidget(self.widget_create_task_2)
+        )
+        self.lineEdit_create_group.returnPressed.connect(self.create_group_pressed)
+        self.lineEdit_invite.returnPressed.connect(self.invite_pressed)
+        self.lineEdit_create_task.returnPressed.connect(self.create_task_pressed)
+
+    def create_group_pressed(self):
+        self.stackWidget_create_group.setCurrentWidget(self.widget_create_group_1)
+
+    def invite_pressed(self):
+        self.stackWidget_invite.setCurrentWidget(self.widget_invite_1)
+
+    def create_task_pressed(self):
+        self.stackWidget_create_task.setCurrentWidget(self.widget_create_task_1)
 
 

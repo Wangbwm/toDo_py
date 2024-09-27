@@ -3,9 +3,11 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 from qfluentwidgets import RadioButton, LineEdit, ComboBox, PushButton, ZhDatePicker, CalendarPicker, TimePicker
 from qfluentwidgets import FluentIcon as FIF
 
+
 class WidgetRight(QWidget):
-    def __init__(self):
+    def __init__(self, comm):
         super().__init__()
+        self.comm = comm
         # 创建垂直布局
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -46,6 +48,7 @@ class WidgetRight(QWidget):
 
         self.stackedWidget_dueDate = QtWidgets.QStackedWidget(self)
         self.stackedWidget_dueDate.setObjectName("stackedWidget_dueDate")
+        self.stackedWidget_dueDate.setFixedHeight(40)
         self.widget_dueDate_1 = QWidget()
         self.widget_dueDate_1.setObjectName("widget_dueDate_1")
         self.btn_dueDate = PushButton('设置到期')
@@ -73,6 +76,7 @@ class WidgetRight(QWidget):
 
         self.stackedWidget_remind = QtWidgets.QStackedWidget(self)
         self.stackedWidget_remind.setObjectName("stackedWidget_remind")
+        self.stackedWidget_remind.setFixedHeight(40)
         self.widget_remind_1 = QWidget()
         self.widget_remind_1.setObjectName("widget_remind_1")
         self.btn_remind = PushButton('设置提醒')
@@ -166,7 +170,5 @@ font: 25 15pt "等线";')
         horizontalLayout.addWidget(self.stackedWidget_add)
         horizontalLayout.addItem(self.hSpacer)
         self.verticalLayout.addLayout(horizontalLayout)
-
-
 
         self.setLayout(self.verticalLayout)
