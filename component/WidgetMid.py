@@ -6,14 +6,16 @@ from component.MidHome import MidHomeWidget
 
 
 class WidgetMid(QWidget):
-    def __init__(self, comm):
+    def __init__(self, db, service, comm):
         super().__init__()
+        self.db = db
+        self.service = service
         self.comm = comm
         # 创建水平布局
         self.hBoxLayout = QHBoxLayout(self)
         self.stackWidget = QtWidgets.QStackedWidget(self)
-        self.home_widget = MidHomeWidget()
-        self.group_widget = MidGroupWidget()
+        self.home_widget = MidHomeWidget(self.db, self.service, self.comm)
+        self.group_widget = MidGroupWidget(self.db, self.service, self.comm)
         self.stackWidget.setStyleSheet('background-color: rgb(255, 255, 255);\
                                        border-radius:30px;')
         self.initLayout()
@@ -42,6 +44,7 @@ class WidgetMid(QWidget):
             self.stackWidget.setCurrentWidget(self.home_widget)
             self.home_widget.sort_comboBox.setVisible(True)
             self.comm.singleton.emit('SET_DISABLE_RIGHT_WIDGET')
+
 
 
 

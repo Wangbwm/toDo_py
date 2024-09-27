@@ -17,8 +17,8 @@ class MainWindow(QWidget):
         # 创建水平布局
         self.hBoxLayout = QHBoxLayout(self)
         self.widget_left = WidgetLeft(self.db, self.service, self.comm)
-        self.widget_mid = WidgetMid(self.comm)
-        self.widget_right = WidgetRight(self.comm)
+        self.widget_mid = WidgetMid(self.db, self.service, self.comm)
+        self.widget_right = WidgetRight(self.db, self.service, self.comm)
 
         self.initLayout()
         self.init_connections()
@@ -35,4 +35,10 @@ class MainWindow(QWidget):
     def single_methods(self, signal):
         if signal == 'SET_DISABLE_RIGHT_WIDGET':
             self.widget_right.setDisabled(True)
+        elif signal == 'SET_ABLE_RIGHT_WIDGET':
+            self.widget_right.setDisabled(False)
+        elif signal == 'SET_ABLE_MID_WIDGET':
+            self.widget_mid.setDisabled(False)
+        elif signal == 'SET_DISABLE_MID_WIDGET':
+            self.widget_mid.setDisabled(True)
 

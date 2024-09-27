@@ -1,12 +1,23 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTreeWidgetItem
 from qfluentwidgets import PushButton, ComboBox, LineEdit, TreeWidget
 from qfluentwidgets import FluentIcon as FIF
 
 
 class MidGroupWidget(QWidget):
-    def __init__(self):
+    def __init__(self, db, service, comm):
         super().__init__()
+        self.db = db
+        self.service = service
+        self.comm = comm
+
+        self.m_userId = -1
+        self.m_username = None
+        self.m_allTasks = []
+        self.m_unscheduledTasks = []
+        self.m_HaveFinishedTasks = []
+        self.m_next7DaysTasks = []
+        self.m_afterNextWeekTasks = []
 
         # 创建垂直布局
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -160,8 +171,9 @@ class MidGroupWidget(QWidget):
         self.treeWidget_group_1 = TreeWidget()
         self.treeWidget_group_1.setObjectName("treeWidget_group_1")
         self.treeWidget_group_1.setStyleSheet('background-color: rgb(249, 249, 249);\
-                                              font: 25 11pt "等线";')
-        self.treeWidget_group_1.setFixedWidth(600)
+                                              font: 25 11pt "等线";\
+        border-radius:0px;')
+        # self.treeWidget_group_1.setFixedWidth(600)
         self.treeWidget_group_1.header().setVisible(False)
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.addWidget(self.treeWidget_group_1)
@@ -173,7 +185,7 @@ class MidGroupWidget(QWidget):
         self.textBrowser.setObjectName("textBrowser")
         self.textBrowser.setStyleSheet('border:2px solid rgb(16,138,220);\
 font: 25 15pt "等线";')
-        self.textBrowser.setFixedSize(600, 300)
+        self.textBrowser.setFixedHeight(300)
         self.vSpacer = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Preferred)
         verticalLayout = QtWidgets.QVBoxLayout()
         verticalLayout.addWidget(self.textBrowser)
@@ -189,7 +201,7 @@ font: 25 15pt "等线";')
 
         # self.stackWidget_group.setCurrentIndex(0)
         self.horizontalLayout = QHBoxLayout()
-        self.hSpacer = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding)
+        self.hSpacer = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Fixed)
         self.horizontalLayout.addItem(self.hSpacer)
         self.horizontalLayout.addWidget(self.stackWidget_group)
         self.horizontalLayout.addItem(self.hSpacer)
@@ -211,6 +223,9 @@ font: 25 15pt "等线";')
         self.lineEdit_create_group.returnPressed.connect(self.create_group_pressed)
         self.lineEdit_invite.returnPressed.connect(self.invite_pressed)
         self.lineEdit_create_task.returnPressed.connect(self.create_task_pressed)
+
+    def create_pressed(self):
+        self.stackedWidget_create.setCurrentWidget(self.widget_create_1)
 
     def create_group_pressed(self):
         self.stackWidget_create_group.setCurrentWidget(self.widget_create_group_1)
